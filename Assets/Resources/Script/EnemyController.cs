@@ -6,25 +6,25 @@ public class EnemyController : MonoBehaviour
 {
 	public int Health;
 	public int Attack;
+	public int Shield;
 	public int Type;
 	void Start ()
 	{
 		Health = Random.Range(1, 3);
 		Attack = Random.Range(1, 3);
+		Shield = Random.Range(1, 3);
 		Type = Random.Range(1,3);
 	}
 
 	public void Engage(int avatarType, int damage)
 	{
+		if (avatarType == Type)
+			damage = damage * 2;
+		
+		damage = Mathf.Clamp(damage - Shield,1, int.MaxValue);
 		if (Health <= 0) return;
-			if (avatarType == Type)
-			{
-				Health = Health - (damage * 2);
-			}
-			else
-			{
 				Health = Health - damage;
-			}
+			
 		Debug.LogError("hp: "+Health);
 	}
 
@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
 		if (Health <= 0)
 		{
 			CombatResoved();
-//			Destroy(gameObject);
+			Destroy(gameObject);
 		}
 	}
 

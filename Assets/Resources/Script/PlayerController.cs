@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 	
 	public int CurrentHealth;
 	public int CurrentAttack;
+	public int CurrentShield;
 	public int CurrentType;
 
 	public List<Transform> HeroList;
@@ -69,6 +70,18 @@ public class PlayerController : MonoBehaviour
 			_vector = -Vector2.right;
 		}
 		_moveVector = _vector / 3f;
+
+		if (CurrentHealth <= 0)
+		{
+			if (HeroList.Count > 0)
+			{
+				// TODO:: Swap Current Avatar
+			}
+			else
+			{
+				// GameOver();
+			}
+		}
 		
 		if (Input.GetKey(KeyCode.Space))
 		{
@@ -145,9 +158,14 @@ public class PlayerController : MonoBehaviour
 
 	private void EngageEnemy(GameObject collideGameObject)
 	{
-		
+		var enemyInfo = collideGameObject.GetComponent<EnemyController>();
+		var enemyAttack = enemyInfo.Attack - CurrentShield;
+		if (CurrentType == enemyInfo.Type)
+			CurrentHealth -= enemyAttack * 2;
+		else
+			CurrentHealth -= enemyAttack;
 	}
-
+	
 	public void CombatResolved()
 	{
 		Data.Instance.AddPoint(_totalHealth);

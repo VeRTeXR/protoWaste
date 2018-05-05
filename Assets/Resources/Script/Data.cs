@@ -42,7 +42,7 @@ public class  Data : MonoBehaviour
 
 		Player = GameObject.FindWithTag("Player");
 		if (Player == null)
-			Instantiate(Resources.Load("Prefab/Player"));
+			Player = (GameObject)Instantiate(Resources.Load("Prefab/Player"));
 	}
 //
 	private void InitializeTimer()
