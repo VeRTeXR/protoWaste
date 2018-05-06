@@ -54,7 +54,7 @@ public class  Data : MonoBehaviour
 //
 	private void InitializeTimer()
 	{
-		MaxAvatarSpawnTimer = 10;
+		MaxAvatarSpawnTimer = 2f;
 		MaxEnemySpawnTimer = 5f;
 		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
@@ -70,7 +70,7 @@ public class  Data : MonoBehaviour
 	void Update ()
 	{
 		CurrentAvatarSpawnTimer -= Time.deltaTime;
-		CurrentEnemySpawnTimer -= Time.deltaTime;
+//		CurrentEnemySpawnTimer -= Time.deltaTime;
 //		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
 //
 		if (CurrentAvatarSpawnTimer <= 0)
@@ -100,25 +100,16 @@ public class  Data : MonoBehaviour
 //		} 
 	}
 
-	public void LevelComplete()
-	{
-		CurrentLevel++;
-		PlayerPrefs.SetInt("CurrentLevel", CurrentLevel);
-		Debug.LogError(CurrentLevel);
-		PlayerPrefs.SetInt("LastLevelReached",CurrentLevel);
-		RestartLevel();
-	}
-
+	
 	private void RestartLevel()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
-	private void GameOver()
+	public void GameOver()
 	{
-		Debug.LogError("do something on game over");
-		RestartLevel();
-//		CurrentTimer = MaxTimer;
+		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
+		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
 	}
 
 	public void ResetPlayerPref()

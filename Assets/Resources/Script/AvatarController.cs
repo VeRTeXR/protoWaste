@@ -19,7 +19,7 @@ public class AvatarController : MonoBehaviour
 		Type = Random.Range(1, 5);
 	}
 	
-	private void OnCollisionEnter2D(Collision2D c)
+	private void OnTriggerEnter2D(Collider2D c)
 	{
 		if (c.gameObject.CompareTag("Player"))
 		{

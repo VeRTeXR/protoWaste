@@ -14,14 +14,17 @@ public class UITextController : MonoBehaviour
 		UpdateRemainingAvatarText();
 		UpdateTotalHpText();
 	}
+
 	public void UpdateCurrentHpText()
 	{
-		CurrentHpText.GetComponent<Text>().text = "CurHP : " + Data.Instance.Player.GetComponent<PlayerController>().CurrentHealth;
+		CurrentHpText.GetComponent<Text>().text =
+			"CurHP : " + Data.Instance.Player.GetComponent<PlayerController>().CurrentHealth;
 	}
 
 	public void UpdateTotalHpText()
 	{
-		TotalHpText.GetComponent<Text>().text = "TotalHP : "+Data.Instance.Player.GetComponent<PlayerController>().GetTotalHealth();
+		TotalHpText.GetComponent<Text>().text =
+			"TotalHP : " + Data.Instance.Player.GetComponent<PlayerController>().GetTotalHealth();
 	}
 
 	public void UpdateRemainingAvatarText()

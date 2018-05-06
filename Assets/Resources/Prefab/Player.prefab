@@ -72,7 +72,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentHealth: 0
   CurrentAttack: 0
+  CurrentShield: 0
   CurrentType: 0
   HeroList: []
   NewHero: {fileID: 1939310546551016, guid: 8db5c87f2d3678740a69b3b1c49e7d30, type: 2}

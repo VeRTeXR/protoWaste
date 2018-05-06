@@ -24,8 +24,6 @@ public class EnemyController : MonoBehaviour
 		damage = Mathf.Clamp(damage - Shield,1, int.MaxValue);
 		if (Health <= 0) return;
 				Health = Health - damage;
-			
-		Debug.LogError("hp: "+Health);
 	}
 
 	void Update()
@@ -42,7 +40,7 @@ public class EnemyController : MonoBehaviour
 		Data.Instance.Player.GetComponent<PlayerController>().CombatResolved();
 	}
 
-	void OnCollisionEnter2D(Collision2D c)
+	void OnTriggerEnter2D(Collider2D c)
 	{
 		if (c.gameObject.CompareTag("Player"))
 		{

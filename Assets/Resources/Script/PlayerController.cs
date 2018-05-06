@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.NetworkInformation;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -48,6 +46,7 @@ public class PlayerController : MonoBehaviour
 		CurrentType = 1;
 		_totalHealth = CurrentHealth;
 //		HeroList.Insert(0,transform);
+		UpdateTotalHealth();
 		InvokeRepeating("Movement", 0.5f, 1);
 	}
 	
@@ -95,7 +94,8 @@ public class PlayerController : MonoBehaviour
 			}
 			else
 			{
-				// GameOver();
+				Destroy(gameObject);
+//				Data.Instance.GameOver(); // GameOver();
 			}
 		}
 		
@@ -118,6 +118,7 @@ public class PlayerController : MonoBehaviour
 			HeroList.RemoveAt(HeroList.Count - 1);
 			Destroy(nextAvatar.gameObject);
 		}
+		UpdateTotalHealth();
 	}
 
 	private IEnumerator ResetSwapCountdown()
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
 
 	public int GetTotalHealth()
 	{
+		UpdateTotalHealth();
 		return _totalHealth;
 	}
 
@@ -209,15 +211,15 @@ public class PlayerController : MonoBehaviour
 		_totalHealth = 0;
 		for (var i = 0; i < HeroList.Count; i++)
 		{
+			_totalHealth = CurrentHealth;
 			if (HeroList[i].gameObject.GetComponent<FriendlyHeroController>())
 				_totalHealth = _totalHealth + HeroList[i].gameObject.GetComponent<FriendlyHeroController>().Health;
-			else
-				_totalHealth = _totalHealth + CurrentHealth;
+			Debug.LogError(i+" : _total H : "+_totalHealth);
 		}
-		Debug.LogError("_total H : "+_totalHealth);
+		
 	}
 
-	private void OnCollisionEnter2D(Collision2D c)
+	private void OnTriggerEnter2D(Collider2D c)
 	{
 		if (c.gameObject.CompareTag("Level"))
 		{
