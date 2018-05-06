@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4621050745271160}
   - component: {fileID: 212494054984250718}
   - component: {fileID: 114256640083444426}
+  - component: {fileID: 114639010895986366}
   m_Layer: 0
   m_Name: NewHero
   m_TagString: Avatar
@@ -55,6 +56,20 @@ MonoBehaviour:
   Health: 0
   Attack: 0
   Type: 0
+  Shield: 0
+--- !u!114 &114639010895986366
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1939310546551016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f71f90380ab0c42a412067f2f5d3d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FollowPos: {x: 0, y: 0}
+  MinDistanceBetweenMember: 1
 --- !u!212 &212494054984250718
 SpriteRenderer:
   m_ObjectHideFlags: 1

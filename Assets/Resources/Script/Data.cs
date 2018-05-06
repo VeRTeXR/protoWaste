@@ -7,13 +7,20 @@ public class  Data : MonoBehaviour
 
 //	public GameObject Timer;
 	public GameObject Player;
-	public float MaxTimer;
-	public float CurrentTimer;
+	public float MaxAvatarSpawnTimer;
+	public float CurrentAvatarSpawnTimer;
+	public float MaxEnemySpawnTimer;
+	public float CurrentEnemySpawnTimer;
 	private bool _playerCompletedTheLevel;
 	private int _highScore;
 	private int _currentSessionScore;
 	private int _lastLevelReached;
 
+	public Transform rBorder;
+	public Transform lBorder;
+	public Transform tBorder;
+	public Transform bBorder;
+	
 	private static Data _instance;
 	public static Data Instance
 	{
@@ -47,8 +54,10 @@ public class  Data : MonoBehaviour
 //
 	private void InitializeTimer()
 	{
-		MaxTimer = 10;
-		CurrentTimer = MaxTimer;
+		MaxAvatarSpawnTimer = 10;
+		MaxEnemySpawnTimer = 5f;
+		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
+		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
 	}
 
 	private void InitializePlayerValue()
@@ -60,14 +69,28 @@ public class  Data : MonoBehaviour
 
 	void Update ()
 	{
-		CurrentTimer = CurrentTimer - Time.deltaTime;
+		CurrentAvatarSpawnTimer -= Time.deltaTime;
+		CurrentEnemySpawnTimer -= Time.deltaTime;
 //		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
 //
-		if (CurrentTimer <= 0)
+		if (CurrentAvatarSpawnTimer <= 0)
 		{
 			var Avatar = Resources.Load("Prefab/Avatar");
-			var a = Instantiate(Avatar, transform);
-			CurrentTimer = MaxTimer;
+			int x = (int)Random.Range (lBorder.position.x, rBorder.position.x);
+			int y = (int)Random.Range (bBorder.position.y, tBorder.position.y);
+		
+			Instantiate (Avatar, new Vector2 (x, y), Quaternion.identity);
+			CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
+		}
+		
+		if (CurrentEnemySpawnTimer <= 0)
+		{
+			var Enemy = Resources.Load("Prefab/Enemy");
+			int x = (int)Random.Range (lBorder.position.x, rBorder.position.x);
+			int y = (int)Random.Range (bBorder.position.y, tBorder.position.y);
+			
+			Instantiate (Enemy, new Vector2 (x, y), Quaternion.identity);
+			CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
 		}
 
 //		if (_playerCompletedTheLevel)
