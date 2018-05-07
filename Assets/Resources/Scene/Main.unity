@@ -108,52 +108,6 @@ NavMeshSettings:
     tileSize: 256
     accuratePlacement: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &2889687
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4141599186429742, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1900848492434816, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 492f1a2d3b679074aa8191b5353f4672, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &55740018
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,7 +403,7 @@ GameObject:
   - component: {fileID: 462884514}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: UICanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

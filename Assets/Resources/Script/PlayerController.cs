@@ -279,7 +279,9 @@ public class PlayerController : MonoBehaviour
 		var enemyAttack = enemyInfo.Attack;
 		if (CurrentType == enemyInfo.Type)
 			enemyAttack = enemyAttack * 2;
-		CurrentHealth = CurrentHealth - Mathf.Clamp(enemyAttack - CurrentShield, 1, Int32.MaxValue);
+		var totalDamage = Mathf.Clamp(enemyAttack - CurrentShield, 1, Int32.MaxValue);
+		CurrentHealth = CurrentHealth - totalDamage;
+		FloatingTextController.CreateFloatingText(totalDamage.ToString(), transform);
 	}
 
 	public void CombatResolved()

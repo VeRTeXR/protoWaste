@@ -7,6 +7,7 @@ TagManager:
   - Level
   - Enemy
   - Avatar
+  - UICanvas
   layers:
   - Default
   - TransparentFX
