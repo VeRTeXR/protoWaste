@@ -54,7 +54,7 @@ public class  Data : MonoBehaviour
 //
 	private void InitializeTimer()
 	{
-		MaxAvatarSpawnTimer = 2f;
+		MaxAvatarSpawnTimer = 3f;
 		MaxEnemySpawnTimer = 5f;
 		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
@@ -70,7 +70,7 @@ public class  Data : MonoBehaviour
 	void Update ()
 	{
 		CurrentAvatarSpawnTimer -= Time.deltaTime;
-//		CurrentEnemySpawnTimer -= Time.deltaTime;
+		CurrentEnemySpawnTimer -= Time.deltaTime;
 //		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
 //
 		if (CurrentAvatarSpawnTimer <= 0)

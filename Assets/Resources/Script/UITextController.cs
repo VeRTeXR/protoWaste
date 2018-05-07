@@ -10,6 +10,7 @@ public class UITextController : MonoBehaviour
 
 	void Update()
 	{
+		if (Data.Instance.Player == null) return;
 		UpdateCurrentHpText();
 		UpdateRemainingAvatarText();
 		UpdateTotalHpText();

@@ -80,7 +80,15 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
 			if(_isSwappingHero && HeroList.Count == 0) return;
-			SwapCurrentAvatarIfAppropriate();
+				SwapAvatarRightIfAppropriate();
+			StartCoroutine(ResetSwapCountdown());
+			_isSwappingHero = true;
+		}
+
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			if(_isSwappingHero && HeroList.Count == 0) return;
+				SwapAvatarLeftIfAppropriate();
 			StartCoroutine(ResetSwapCountdown());
 			_isSwappingHero = true;
 		}
@@ -89,8 +97,7 @@ public class PlayerController : MonoBehaviour
 		{
 			if (HeroList.Count > 0)
 			{
-				SwapToReservedHero();
-				HeroList.RemoveAt(HeroList.Count-1);// TODO:: Swap Current Avatar
+				SwapToReservedHeroAndDestroyCurrentHero();
 			}
 			else
 			{
@@ -105,8 +112,16 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private void SwapToReservedHero()
+	private void SwapToReservedHeroAndDestroyCurrentHero()
 	{
+		if (_CurrentListIndex >= HeroList.Count)
+		{
+			_CurrentListIndex--;
+		}
+		else
+		{
+			_CurrentListIndex++;
+		}
 		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex,0,HeroList.Count)].gameObject.GetComponent<FriendlyHeroController>();
 		if (nextAvatar != null)
 		{
@@ -118,7 +133,9 @@ public class PlayerController : MonoBehaviour
 			HeroList.RemoveAt(HeroList.Count - 1);
 			Destroy(nextAvatar.gameObject);
 		}
-		UpdateTotalHealth();
+		else
+		{
+		}
 	}
 
 	private IEnumerator ResetSwapCountdown()
@@ -133,38 +150,56 @@ public class PlayerController : MonoBehaviour
 		return _totalHealth;
 	}
 
-	private void SwapCurrentAvatarIfAppropriate()
+	private void SwapAvatarRightIfAppropriate()
 	{
 		if (HeroList.Count > 0)
 		{
-			var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex,0,HeroList.Count)].gameObject.GetComponent<FriendlyHeroController>();
-			if (nextAvatar != null)
-			{
-				var tempHealth = CurrentHealth;
-				var tempAttack = CurrentAttack;
-				var tempShield = CurrentShield;
-				var tempType = CurrentType;
-				var tempSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
-				CurrentHealth = nextAvatar.Health;
-				CurrentAttack = nextAvatar.Attack;
-				CurrentShield = nextAvatar.Shield;
-				CurrentType = nextAvatar.Type;
-				gameObject.GetComponent<SpriteRenderer>().sprite = nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite;
-				nextAvatar.Health = tempHealth;
-				nextAvatar.Attack = tempAttack;
-				nextAvatar.Shield = tempShield;
-				nextAvatar.Type = tempType;
-				nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite = tempSprite;
-			}
+			SwapAvatar();
 			
-			if (_CurrentListIndex >= HeroList.Count-1)
-				_CurrentListIndex = -1;
+			if (_CurrentListIndex >= HeroList.Count - 1)
+				_CurrentListIndex = 0;
 			else
-				_CurrentListIndex++;
+				Mathf.Clamp(_CurrentListIndex++,0, HeroList.Count);
 		}
 	}
 	
-	
+	private void SwapAvatarLeftIfAppropriate()
+	{
+		if (HeroList.Count > 0)
+		{
+			SwapAvatar();
+
+			if (_CurrentListIndex < 0)
+				_CurrentListIndex = HeroList.Count-1;
+			else
+				Mathf.Clamp(_CurrentListIndex--,0, HeroList.Count);
+		}
+	}
+
+	private void SwapAvatar()
+	{
+		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex, 0, HeroList.Count)].gameObject
+			.GetComponent<FriendlyHeroController>();
+		if (nextAvatar != null)
+		{
+			var tempHealth = CurrentHealth;
+			var tempAttack = CurrentAttack;
+			var tempShield = CurrentShield;
+			var tempType = CurrentType;
+			var tempSprite = gameObject.GetComponent<SpriteRenderer>().sprite;
+			CurrentHealth = nextAvatar.Health;
+			CurrentAttack = nextAvatar.Attack;
+			CurrentShield = nextAvatar.Shield;
+			CurrentType = nextAvatar.Type;
+			gameObject.GetComponent<SpriteRenderer>().sprite = nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite;
+			nextAvatar.Health = tempHealth;
+			nextAvatar.Attack = tempAttack;
+			nextAvatar.Shield = tempShield;
+			nextAvatar.Type = tempType;
+			nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite = tempSprite;
+		}
+	}
+
 
 	private void Movement()
 	{
@@ -172,21 +207,13 @@ public class PlayerController : MonoBehaviour
 		if (_isCollectingHero)
 		{
 			HeroList.Insert(0, SpawnedHero.transform);
-			UpdateTotalHealth();
 			_isCollectingHero = false;
 		}
 		else if (HeroList.Count > 0)
 		{
 //			for (var i = 0; i < HeroList.Count; i++)
 //			{
-//				if (i > 0)
-//				{
-//					HeroList[i].GetComponent<FollowPartyPosition>().SetFollowPosition(HeroList[i-1].position);
-//				}
-//				else
-//				{
-//					HeroList[i].GetComponent<FollowPartyPosition>().SetFollowPosition(transform.position);
-//				}
+//				HeroList[i] = HeroList[i].localPosition  (Vector2)_moveVector;
 //			}
 			HeroList.Last().position = ta;
 			HeroList.Insert(0, HeroList.Last());
@@ -202,21 +229,20 @@ public class PlayerController : MonoBehaviour
 			g.GetComponent<SpriteRenderer>().sprite = _collectedHero.GetComponent<SpriteRenderer>().sprite;
 			var avatarController = _collectedHero.GetComponent<AvatarController>();
 			g.GetComponent<FriendlyHeroController>().SetHeroStat(avatarController.Health, avatarController.Attack,avatarController.Shield, avatarController.Type);
-//			g.transform.parent = transform;
 		}
 	}
 
 	private void UpdateTotalHealth()
 	{
-		_totalHealth = 0;
+		_totalHealth = CurrentHealth;
 		for (var i = 0; i < HeroList.Count; i++)
 		{
-			_totalHealth = CurrentHealth;
-			if (HeroList[i].gameObject.GetComponent<FriendlyHeroController>())
-				_totalHealth = _totalHealth + HeroList[i].gameObject.GetComponent<FriendlyHeroController>().Health;
-			Debug.LogError(i+" : _total H : "+_totalHealth);
+			var friendlyStat = HeroList[i].gameObject.GetComponent<FriendlyHeroController>();
+			if (friendlyStat != null)
+				_totalHealth = _totalHealth + friendlyStat.Health;
+			else
+				return;
 		}
-		
 	}
 
 	private void OnTriggerEnter2D(Collider2D c)
@@ -224,6 +250,8 @@ public class PlayerController : MonoBehaviour
 		if (c.gameObject.CompareTag("Level"))
 		{
 			_vector = -_vector;
+			if(HeroList.Count > 0)
+				SwapToReservedHeroAndDestroyCurrentHero();
 		}
 
 		if (c.gameObject.CompareTag("Enemy"))
@@ -251,11 +279,10 @@ public class PlayerController : MonoBehaviour
 		var enemyInfo = collideGameObject.GetComponent<EnemyController>();
 		var enemyAttack = enemyInfo.Attack;
 		if (CurrentType == enemyInfo.Type)
-			enemyAttack = enemyAttack*2;
-		CurrentHealth = CurrentHealth - Mathf.Clamp(enemyAttack- CurrentShield, 1, Int32.MaxValue);
-		Debug.LogError("cH : "+CurrentHealth+" attk : "+ enemyAttack);
+			enemyAttack = enemyAttack * 2;
+		CurrentHealth = CurrentHealth - Mathf.Clamp(enemyAttack - CurrentShield, 1, Int32.MaxValue);
 	}
-	
+
 	public void CombatResolved()
 	{
 		Data.Instance.AddPoint(_totalHealth);
