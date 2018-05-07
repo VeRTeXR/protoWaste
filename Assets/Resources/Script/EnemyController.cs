@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour
 			damage = damage * 2;
 		
 		damage = Mathf.Clamp(damage - Shield,1, int.MaxValue);
+		FloatingTextController.CreateFloatingText(damage.ToString(), transform);
 		if (Health <= 0) return;
 				Health = Health - damage;
 	}
@@ -46,7 +47,12 @@ public class EnemyController : MonoBehaviour
 		{
 			var playerController = c.gameObject.GetComponent<PlayerController>();
 			Engage(playerController.CurrentType, playerController.CurrentAttack);	
+			
 		}
 	}
-	
+
+	public void SetSprite(Sprite enemySprite)
+	{
+		GetComponent<SpriteRenderer>().sprite = enemySprite;
+	}
 }

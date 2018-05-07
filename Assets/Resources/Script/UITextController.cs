@@ -7,6 +7,7 @@ public class UITextController : MonoBehaviour
 	public GameObject CurrentHpText;
 	public GameObject TotalHpText;
 	public GameObject RemainingAvatarText;
+	public GameObject ScoreText;
 
 	void Update()
 	{
@@ -14,12 +15,18 @@ public class UITextController : MonoBehaviour
 		UpdateCurrentHpText();
 		UpdateRemainingAvatarText();
 		UpdateTotalHpText();
+		UpdateScoreText();
 	}
 
 	public void UpdateCurrentHpText()
 	{
 		CurrentHpText.GetComponent<Text>().text =
 			"CurHP : " + Data.Instance.Player.GetComponent<PlayerController>().CurrentHealth;
+	}
+
+	public void UpdateScoreText()
+	{
+		ScoreText.GetComponent<Text>().text = "Score : " + Data.Instance.GetCurrentScore();
 	}
 
 	public void UpdateTotalHpText()

@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
 			else
 			{
 				Destroy(gameObject);
-//				Data.Instance.GameOver(); // GameOver();
+				Data.Instance.GameOver(); // GameOver();
 			}
 		}
 		
@@ -114,15 +114,16 @@ public class PlayerController : MonoBehaviour
 
 	private void SwapToReservedHeroAndDestroyCurrentHero()
 	{
-		if (_CurrentListIndex >= HeroList.Count)
+		if (_CurrentListIndex == HeroList.Count)
 		{
-			_CurrentListIndex--;
+			Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count-1);
 		}
 		else
 		{
-			_CurrentListIndex++;
+			Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count-1);
 		}
-		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex,0,HeroList.Count)].gameObject.GetComponent<FriendlyHeroController>();
+		Debug.LogError(_CurrentListIndex);
+		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex,0,HeroList.Count-1)].gameObject.GetComponent<FriendlyHeroController>();
 		if (nextAvatar != null)
 		{
 			CurrentHealth = nextAvatar.Health;
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviour
 			CurrentShield = nextAvatar.Shield;
 			CurrentType = nextAvatar.Type;
 			gameObject.GetComponent<SpriteRenderer>().sprite = nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite;
-			HeroList.RemoveAt(HeroList.Count - 1);
+			HeroList.RemoveAt(_CurrentListIndex);
 			Destroy(nextAvatar.gameObject);
 		}
 		else
@@ -154,12 +155,11 @@ public class PlayerController : MonoBehaviour
 	{
 		if (HeroList.Count > 0)
 		{
-			SwapAvatar();
-			
 			if (_CurrentListIndex >= HeroList.Count - 1)
 				_CurrentListIndex = 0;
 			else
-				Mathf.Clamp(_CurrentListIndex++,0, HeroList.Count);
+				Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count);
+			SwapAvatar();
 		}
 	}
 	
@@ -167,12 +167,11 @@ public class PlayerController : MonoBehaviour
 	{
 		if (HeroList.Count > 0)
 		{
-			SwapAvatar();
-
 			if (_CurrentListIndex < 0)
-				_CurrentListIndex = HeroList.Count-1;
+				_CurrentListIndex = HeroList.Count - 1;
 			else
-				Mathf.Clamp(_CurrentListIndex--,0, HeroList.Count);
+				Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count);
+			SwapAvatar();
 		}
 	}
 

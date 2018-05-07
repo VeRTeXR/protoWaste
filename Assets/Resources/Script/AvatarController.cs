@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AvatarController : MonoBehaviour
 {
@@ -18,6 +15,11 @@ public class AvatarController : MonoBehaviour
 		Shield = Random.Range(1, 5);
 		Type = Random.Range(1, 5);
 	}
+
+	public void SetSprite(Sprite avatarSprite)
+	{
+		GetComponent<SpriteRenderer>().sprite = avatarSprite;
+	} 
 	
 	private void OnTriggerEnter2D(Collider2D c)
 	{

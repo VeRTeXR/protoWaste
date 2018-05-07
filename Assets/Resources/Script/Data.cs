@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.VR.WSA.Persistence;
 
 public class  Data : MonoBehaviour
 {
@@ -20,8 +21,14 @@ public class  Data : MonoBehaviour
 	public Transform lBorder;
 	public Transform tBorder;
 	public Transform bBorder;
-	
+
+	public Sprite[] EnemySprites;
+	public Sprite[] AlliedSprites;
+
+	public GameObject Spawner; 
 	private static Data _instance;
+	private bool _isPlaying;
+
 	public static Data Instance
 	{
 		get { return _instance; }
@@ -51,13 +58,14 @@ public class  Data : MonoBehaviour
 		if (Player == null)
 			Player = (GameObject)Instantiate(Resources.Load("Prefab/Player"));
 	}
-//
+	
 	private void InitializeTimer()
 	{
 		MaxAvatarSpawnTimer = 3f;
 		MaxEnemySpawnTimer = 5f;
 		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
+		_isPlaying = true;
 	}
 
 	private void InitializePlayerValue()
@@ -69,35 +77,28 @@ public class  Data : MonoBehaviour
 
 	void Update ()
 	{
-		CurrentAvatarSpawnTimer -= Time.deltaTime;
-		CurrentEnemySpawnTimer -= Time.deltaTime;
+		if (_isPlaying)
+		{
+//			CurrentAvatarSpawnTimer -= Time.deltaTime;
+			CurrentEnemySpawnTimer -= Time.deltaTime;
+		}
 //		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
 //
 		if (CurrentAvatarSpawnTimer <= 0)
 		{
-			var Avatar = Resources.Load("Prefab/Avatar");
-			int x = (int)Random.Range (lBorder.position.x, rBorder.position.x);
-			int y = (int)Random.Range (bBorder.position.y, tBorder.position.y);
-		
-			Instantiate (Avatar, new Vector2 (x, y), Quaternion.identity);
+			var avatar = Resources.Load("Prefab/Avatar");
+			var spawnedAvatar = Spawner.GetComponent<SpawnerController>().Spawn((GameObject)avatar);
+			spawnedAvatar.GetComponent<AvatarController>().SetSprite(AlliedSprites[Random.Range(0, AlliedSprites.Length)]); 
 			CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		}
 		
 		if (CurrentEnemySpawnTimer <= 0)
 		{
-			var Enemy = Resources.Load("Prefab/Enemy");
-			int x = (int)Random.Range (lBorder.position.x, rBorder.position.x);
-			int y = (int)Random.Range (bBorder.position.y, tBorder.position.y);
-			
-			Instantiate (Enemy, new Vector2 (x, y), Quaternion.identity);
+			var enemy = Resources.Load("Prefab/Enemy");
+			var spawnedEnemy = Spawner.GetComponent<SpawnerController>().Spawn((GameObject)enemy);
+			spawnedEnemy.GetComponent<EnemyController>().SetSprite(EnemySprites[Random.Range(0, EnemySprites.Length)]);
 			CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
 		}
-
-//		if (_playerCompletedTheLevel)
-//		{
-//			LevelComplete();
-//			Debug.LogError("increment level do shit");
-//		} 
 	}
 
 	
@@ -110,6 +111,7 @@ public class  Data : MonoBehaviour
 	{
 		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
+		_isPlaying = false;
 	}
 
 	public void ResetPlayerPref()
@@ -125,5 +127,10 @@ public class  Data : MonoBehaviour
 	public void AddPoint(int totalHealth)
 	{
 		_currentSessionScore += totalHealth;
+	}
+
+	public int GetCurrentScore()
+	{
+		return _currentSessionScore;
 	}
 }
