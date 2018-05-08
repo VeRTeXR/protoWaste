@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: ba15f6f0c9453f0479622425544bea4c
+timeCreated: 1523519374
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Chubby Choo
+  fontNames:
+  - Chubby Choo
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

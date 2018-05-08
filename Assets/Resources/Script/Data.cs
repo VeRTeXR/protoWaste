@@ -8,6 +8,8 @@ public class  Data : MonoBehaviour
 
 //	public GameObject Timer;
 	public GameObject Player;
+
+	public GameObject StartMenu;
 	public float MaxAvatarSpawnTimer;
 	public float CurrentAvatarSpawnTimer;
 	public float MaxEnemySpawnTimer;
@@ -15,7 +17,6 @@ public class  Data : MonoBehaviour
 	private bool _playerCompletedTheLevel;
 	private int _highScore;
 	private int _currentSessionScore;
-	private int _lastLevelReached;
 
 	public Transform rBorder;
 	public Transform lBorder;
@@ -79,8 +80,8 @@ public class  Data : MonoBehaviour
 	{
 		if (_isPlaying)
 		{
-//			CurrentAvatarSpawnTimer -= Time.deltaTime;
-			CurrentEnemySpawnTimer -= Time.deltaTime;
+			CurrentAvatarSpawnTimer -= Time.deltaTime;
+//			CurrentEnemySpawnTimer -= Time.deltaTime;
 		}
 //		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
 //

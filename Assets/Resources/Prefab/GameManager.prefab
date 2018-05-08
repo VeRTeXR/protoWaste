@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 1400285223130998, guid: 9ad5e5776654c174ba83bc7e867e3d6d, type: 2}
+  StartMenu: {fileID: 0}
   MaxAvatarSpawnTimer: 0
   CurrentAvatarSpawnTimer: 0
   MaxEnemySpawnTimer: 0

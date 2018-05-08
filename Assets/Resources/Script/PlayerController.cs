@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -35,6 +36,17 @@ public class PlayerController : MonoBehaviour
 	private bool _isSwappingHero;
 	private GameObject _collectedHero;
 
+	public List<GameObject> TempHeroList;
+	
+	
+	//maintaining hero list 
+	int  tempHealth;
+	int  tempAttack;
+	int tempShield;
+	int tempType;
+	Sprite tempSprite;
+	
+
 	void Start ()
 	{
 		_walkSpeed = 1f * Mathf.Clamp(Data.Instance.CurrentLevel, 1, 99);
@@ -58,19 +70,19 @@ public class PlayerController : MonoBehaviour
 //		if (_hasPlayerInputBeenProcessed)
 //			HandlePlayerInputCooldownInterval();
 
-		if (Input.GetKey (KeyCode.D) && _horizontal) {
+		if ((Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && _horizontal) {
 			_horizontal = false;
 			_vertical = true;
 			_vector = Vector2.right;
-		} else if (Input.GetKey (KeyCode.W) && _vertical) {
+		} else if ((Input.GetKey (KeyCode.W)|| Input.GetKey(KeyCode.UpArrow)) && _vertical) {
 			_horizontal = true;
 			_vertical = false;
 			_vector = Vector2.up;
-		} else if (Input.GetKey (KeyCode.S) && _vertical) {
+		} else if ((Input.GetKey (KeyCode.S)|| Input.GetKey(KeyCode.DownArrow)) && _vertical) {
 			_horizontal = true;
 			_vertical = false;
 			_vector = -Vector2.up;
-		} else if (Input.GetKey (KeyCode.A) && _horizontal) {
+		} else if ((Input.GetKey (KeyCode.A)|| Input.GetKey(KeyCode.LeftArrow)) && _horizontal) {
 			_horizontal = false;
 			_vertical = true;
 			_vector = -Vector2.right;
@@ -210,16 +222,41 @@ public class PlayerController : MonoBehaviour
 		}
 		else if (HeroList.Count > 0)
 		{
-//			for (var i = 0; i < HeroList.Count; i++)
-//			{
-//				HeroList[i] = HeroList[i].localPosition  (Vector2)_moveVector;
-//			}
 			HeroList.Last().position = ta;
 			HeroList.Insert(0, HeroList.Last());
 			HeroList.RemoveAt(HeroList.Count - 1);
 		}
+
 		transform.Translate(_moveVector);
 	}
+
+//	private void MaintainHeroList()
+//	{
+//		for (var i = 0; i < HeroList.Count - 1; i++)
+//		{
+//			var heroListStat = HeroList[i].gameObject.GetComponent<FriendlyHeroController>();
+//			var tempHeroListStat = TempHeroList[i].GetComponent<FriendlyHeroController>();
+//			heroListStat.Health = tempHeroListStat.Health;
+//			heroListStat.Attack = tempHeroListStat.Attack;
+//			heroListStat.Shield = tempHeroListStat.Shield;
+//			heroListStat.Type = tempHeroListStat.Type;
+//			HeroList[i].gameObject.GetComponent<SpriteRenderer>().sprite = TempHeroList[i].GetComponent<SpriteRenderer>().sprite;
+//		}
+//	}
+
+//	private void CopyHeroListData()
+//	{
+//		for (var i = 0; i < HeroList.Count; i++)
+//		{
+//			TempHeroList.Add(HeroList[i].gameObject);
+//		}
+//
+//		for (var j = 0; j < TempHeroList.Count; j++)
+//		{
+//			Debug.LogError(TempHeroList[j].GetComponent<SpriteRenderer>().sprite.name);
+//		} 
+//		
+//	}
 
 	private void InitializeNewHero(GameObject g)
 	{
