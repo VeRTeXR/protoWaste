@@ -18,11 +18,6 @@ public class  Data : MonoBehaviour
 	private int _highScore;
 	private int _currentSessionScore;
 
-	public Transform rBorder;
-	public Transform lBorder;
-	public Transform tBorder;
-	public Transform bBorder;
-
 	public Sprite[] EnemySprites;
 	public Sprite[] AlliedSprites;
 
@@ -133,5 +128,11 @@ public class  Data : MonoBehaviour
 	public int GetCurrentScore()
 	{
 		return _currentSessionScore;
+	}
+
+	public void AlterSpawnTime()
+	{
+		MaxAvatarSpawnTimer += 1f;
+		MaxEnemySpawnTimer -= 0.4f;
 	}
 }

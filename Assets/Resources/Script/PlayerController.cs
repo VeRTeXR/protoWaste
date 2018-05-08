@@ -36,7 +36,8 @@ public class PlayerController : MonoBehaviour
 	private bool _isSwappingHero;
 	private GameObject _collectedHero;
 
-	public List<GameObject> TempHeroList;
+	public List<Transform> TempHeroList;
+	public List<Transform> PlayerPath;
 	
 	
 	//maintaining hero list 
@@ -171,7 +172,7 @@ public class PlayerController : MonoBehaviour
 				_CurrentListIndex = 0;
 			else
 				Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count);
-			SwapAvatar();
+			SwapAvatar(_CurrentListIndex);
 		}
 	}
 	
@@ -183,13 +184,13 @@ public class PlayerController : MonoBehaviour
 				_CurrentListIndex = HeroList.Count - 1;
 			else
 				Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count);
-			SwapAvatar();
+			SwapAvatar(_CurrentListIndex);
 		}
 	}
 
-	private void SwapAvatar()
+	private void SwapAvatar(int nextAvatarIndex)
 	{
-		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex, 0, HeroList.Count)].gameObject
+		var nextAvatar = HeroList[Mathf.Clamp(nextAvatarIndex, 0, HeroList.Count)].gameObject
 			.GetComponent<FriendlyHeroController>();
 		if (nextAvatar != null)
 		{
@@ -222,41 +223,15 @@ public class PlayerController : MonoBehaviour
 		}
 		else if (HeroList.Count > 0)
 		{
-			HeroList.Last().position = ta;
+			HeroList[0].position = ta;
+			
 			HeroList.Insert(0, HeroList.Last());
 			HeroList.RemoveAt(HeroList.Count - 1);
 		}
-
 		transform.Translate(_moveVector);
 	}
 
-//	private void MaintainHeroList()
-//	{
-//		for (var i = 0; i < HeroList.Count - 1; i++)
-//		{
-//			var heroListStat = HeroList[i].gameObject.GetComponent<FriendlyHeroController>();
-//			var tempHeroListStat = TempHeroList[i].GetComponent<FriendlyHeroController>();
-//			heroListStat.Health = tempHeroListStat.Health;
-//			heroListStat.Attack = tempHeroListStat.Attack;
-//			heroListStat.Shield = tempHeroListStat.Shield;
-//			heroListStat.Type = tempHeroListStat.Type;
-//			HeroList[i].gameObject.GetComponent<SpriteRenderer>().sprite = TempHeroList[i].GetComponent<SpriteRenderer>().sprite;
-//		}
-//	}
 
-//	private void CopyHeroListData()
-//	{
-//		for (var i = 0; i < HeroList.Count; i++)
-//		{
-//			TempHeroList.Add(HeroList[i].gameObject);
-//		}
-//
-//		for (var j = 0; j < TempHeroList.Count; j++)
-//		{
-//			Debug.LogError(TempHeroList[j].GetComponent<SpriteRenderer>().sprite.name);
-//		} 
-//		
-//	}
 
 	private void InitializeNewHero(GameObject g)
 	{
@@ -324,7 +299,8 @@ public class PlayerController : MonoBehaviour
 	public void CombatResolved()
 	{
 		CancelInvoke("Movement");
-		_walkSpeed = (float)Mathf.Clamp(5f/ Data.Instance.GetCurrentScore(), 0.1f, 1) ;
+		_walkSpeed -= 0.015f;
+		Data.Instance.AlterSpawnTime();
 		Debug.LogError("moveSpeed "+ _walkSpeed);
 		InvokeRepeating("Movement", 0.5f, _walkSpeed);
 		Data.Instance.AddPoint(_totalHealth);
