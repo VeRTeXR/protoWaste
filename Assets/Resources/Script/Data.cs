@@ -81,7 +81,7 @@ public class  Data : MonoBehaviour
 		if (_isPlaying)
 		{
 			CurrentAvatarSpawnTimer -= Time.deltaTime;
-//			CurrentEnemySpawnTimer -= Time.deltaTime;
+			CurrentEnemySpawnTimer -= Time.deltaTime;
 		}
 //		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
 //

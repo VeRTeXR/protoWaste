@@ -116,7 +116,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.35, y: 0.35}
+  m_Size: {x: 0.15, y: 0.15}
   m_EdgeRadius: 0
 --- !u!114 &114646691258438980
 MonoBehaviour:
@@ -136,6 +136,7 @@ MonoBehaviour:
   HeroList: []
   NewHero: {fileID: 1939310546551016, guid: 8db5c87f2d3678740a69b3b1c49e7d30, type: 2}
   SpawnedHero: {fileID: 0}
+  TempHeroList: []
 --- !u!212 &212591689811264520
 SpriteRenderer:
   m_ObjectHideFlags: 1

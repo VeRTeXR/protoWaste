@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
 	void Start ()
 	{
-		_walkSpeed = 1f * Mathf.Clamp(Data.Instance.CurrentLevel, 1, 99);
+		_walkSpeed = 0.5f;
 		_keyDownInterval = 0.25f;
 		_currentKeyDownInterval = _keyDownInterval;
 		_CurrentListIndex = -1;
@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
 		_totalHealth = CurrentHealth;
 //		HeroList.Insert(0,transform);
 		UpdateTotalHealth();
-		InvokeRepeating("Movement", 0.5f, 1);
+		InvokeRepeating("Movement", 0.1f, _walkSpeed);
 	}
 	
 	void Update ()
@@ -323,6 +323,10 @@ public class PlayerController : MonoBehaviour
 
 	public void CombatResolved()
 	{
+		CancelInvoke("Movement");
+		_walkSpeed = (float)Mathf.Clamp(5f/ Data.Instance.GetCurrentScore(), 0.1f, 1) ;
+		Debug.LogError("moveSpeed "+ _walkSpeed);
+		InvokeRepeating("Movement", 0.5f, _walkSpeed);
 		Data.Instance.AddPoint(_totalHealth);
 	}
 }
