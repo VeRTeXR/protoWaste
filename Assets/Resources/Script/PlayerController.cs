@@ -11,8 +11,6 @@ public class PlayerController : MonoBehaviour
 	private float _walkSpeed;
 	private int _faceDirection;
 	private float _currentWalkCountdownInterval;
-	private float _keyDownInterval;
-	private float _currentKeyDownInterval;
 	private bool _hasPlayerInputBeenProcessed;
 	private int _totalHealth;
 	
@@ -34,26 +32,17 @@ public class PlayerController : MonoBehaviour
 	public GameObject SpawnedHero;
 	private bool _isCollectingHero;
 	private bool _isSwappingHero;
+	private bool _isColliderOverlapped;
 	private GameObject _collectedHero;
 
-	public List<Transform> TempHeroList;
-	public List<Transform> PlayerPath;
-	
-	
-	//maintaining hero list 
-	int  tempHealth;
-	int  tempAttack;
-	int tempShield;
-	int tempType;
-	Sprite tempSprite;
-	
+	private float _yAngleRotation;
+
 
 	void Start ()
 	{
 		_walkSpeed = 0.5f;
-		_keyDownInterval = 0.25f;
-		_currentKeyDownInterval = _keyDownInterval;
 		_CurrentListIndex = -1;
+		_vector = Vector2.up;
 		CurrentHealth = 3;
 		CurrentAttack = 1;
 		CurrentType = 1;
@@ -65,31 +54,46 @@ public class PlayerController : MonoBehaviour
 	
 	void Update ()
 	{
-//		ProcessingInput();
-//		MovePlayer();
-		
-//		if (_hasPlayerInputBeenProcessed)
-//			HandlePlayerInputCooldownInterval();
+		if (!_isColliderOverlapped)
+		{
+			if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+			{
+				if (_hasPlayerInputBeenProcessed) return;
+				if (_vector == Vector2.right)
+					_vector = -Vector2.up;
+				else if (_vector == -Vector2.up)
+					_vector = -Vector2.right;
+				else if (_vector == -Vector2.right)
+					_vector = Vector2.up;
+				else if (_vector == Vector2.up)
+					_vector = Vector2.right;
+				StartCoroutine(ResetPlayerInputCountdown());
+				_hasPlayerInputBeenProcessed = true;
 
-		if ((Input.GetKey (KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && _horizontal) {
-			_horizontal = false;
-			_vertical = true;
-			_vector = Vector2.right;
-		} else if ((Input.GetKey (KeyCode.W)|| Input.GetKey(KeyCode.UpArrow)) && _vertical) {
-			_horizontal = true;
-			_vertical = false;
-			_vector = Vector2.up;
-		} else if ((Input.GetKey (KeyCode.S)|| Input.GetKey(KeyCode.DownArrow)) && _vertical) {
-			_horizontal = true;
-			_vertical = false;
-			_vector = -Vector2.up;
-		} else if ((Input.GetKey (KeyCode.A)|| Input.GetKey(KeyCode.LeftArrow)) && _horizontal) {
-			_horizontal = false;
-			_vertical = true;
-			_vector = -Vector2.right;
+			}
+			else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+			{
+				if (_hasPlayerInputBeenProcessed) return;
+				if (_vector == Vector2.right)
+					_vector = Vector2.up;
+				else if (_vector == -Vector2.up)
+					_vector = Vector2.right;
+				else if (_vector == -Vector2.right)
+					_vector = -Vector2.up;
+				else if (_vector == Vector2.up)
+					_vector = -Vector2.right;
+				StartCoroutine(ResetPlayerInputCountdown());
+				_hasPlayerInputBeenProcessed = true;
+			}
 		}
-		_moveVector = _vector / 3f;
+		_moveVector = _vector / 6f;
 
+		if (_vector == Vector2.right)
+			GetComponent<SpriteRenderer>().flipX = false;
+		else if (_vector == -Vector2.right)
+			GetComponent<SpriteRenderer>().flipX = true;
+		
+		
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
 			if(_isSwappingHero && HeroList.Count == 0) return;
@@ -119,10 +123,7 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 		
-		if (Input.GetKey(KeyCode.Space))
-		{
-			Data.Instance.ResetPlayerPref();
-		}
+		
 	}
 
 	private void SwapToReservedHeroAndDestroyCurrentHero()
@@ -156,6 +157,12 @@ public class PlayerController : MonoBehaviour
 	{
 		yield return new WaitForSecondsRealtime(0.1f);
 		_isSwappingHero = false;
+	}
+	
+	private IEnumerator ResetPlayerInputCountdown()
+	{
+		yield return new WaitForSecondsRealtime(0.1f);
+		_hasPlayerInputBeenProcessed = false;
 	}
 
 	public int GetTotalHealth()
@@ -224,10 +231,10 @@ public class PlayerController : MonoBehaviour
 		else if (HeroList.Count > 0)
 		{
 			HeroList[0].position = ta;
-			
 			HeroList.Insert(0, HeroList.Last());
 			HeroList.RemoveAt(HeroList.Count - 1);
 		}
+		Debug.LogError("translate coord : "+_moveVector);
 		transform.Translate(_moveVector);
 	}
 
@@ -260,6 +267,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if (c.gameObject.CompareTag("Level"))
 		{
+			Debug.LogError("level trigger collided");
 			_vector = -_vector;
 			if(HeroList.Count > 0)
 				SwapToReservedHeroAndDestroyCurrentHero();
@@ -276,6 +284,23 @@ public class PlayerController : MonoBehaviour
 			SpawnedHero = Instantiate(NewHero, transform.position, Quaternion.identity);
 			InitializeNewHero(SpawnedHero);
 			Destroy(c.gameObject);
+		}
+	}
+
+	private void OnTriggerStay2D(Collider2D c)
+	{
+		if (c.gameObject.CompareTag("Level"))
+		{
+			Debug.LogError("trigger stay");
+			_isColliderOverlapped = true;
+		}
+	}
+
+	private void OnTriggerExit2D(Collider2D other)
+	{
+		if(other.CompareTag("Level"))
+		{
+			_isColliderOverlapped = false;
 		}
 	}
 

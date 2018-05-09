@@ -97,29 +97,24 @@ public class  Data : MonoBehaviour
 		}
 	}
 
-	
-	private void RestartLevel()
-	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-	}
 
 	public void GameOver()
 	{
-		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
+//		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
 		_isPlaying = false;
+		StartMenu.GetComponent<StartOptions>().SessionOver();
 	}
 
-	public void ResetPlayerPref()
+	public void Retry()
 	{
-		PlayerPrefs.DeleteKey("CurrentLevel");
+		InitializeGameObject(); 
+		InitializeTimer();
+		InitializePlayerValue();
+		_currentSessionScore = 0;
+		StartMenu.GetComponent<StartOptions>().Retry();
 	}
-
-	private void OnApplicationQuit()
-	{
-		ResetPlayerPref();
-	}
-
+	
 	public void AddPoint(int totalHealth)
 	{
 		_currentSessionScore += totalHealth;

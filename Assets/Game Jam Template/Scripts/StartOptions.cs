@@ -65,27 +65,49 @@ public class StartOptions : MonoBehaviour {
 		}
 	}
 
-
-	public IEnumerator HideDelayed()
-	{
-		yield return new WaitForSecondsRealtime(FadeAlphaAnimationClip.length);
-		_showPanels.HideMenu();
-	}
-
 	public void StartGameInScene()
 	{
 		InMainMenu = false;
 		ChangeMusicOnStartIfAppropriate();
-		FadeAndDisableMenuPanel();
+		FadeAndDisablePanel(_showPanels.MenuPanel);
 		StartCoroutine("UnpauseGameAfterMenuFaded");
 		_showPanels.ShowGameplay();
-
 	}
+
+	public void SessionOver()
+	{
+		FadeAndDisablePanel(_showPanels.GameplayPanel);
+		_showPanels.ShowResult();
+	}
+	
+	public void Retry()
+	{
+		FadeAndDisablePanel(_showPanels.ResultPanel);
+		_showPanels.ShowGameplay();
+	}
+
+	private void FadeAndDisablePanel(GameObject panelGameObject)
+	{
+		AnimMenuAlpha = panelGameObject.GetComponent<Animator>();
+		if (AnimMenuAlpha != null)
+		{
+			AnimMenuAlpha.SetTrigger("fade");
+		}
+		StartCoroutine(HidePanelDelayed(panelGameObject));
+	}
+
+	private IEnumerator HidePanelDelayed(GameObject panelGameObject)
+	{
+		yield return new WaitForSecondsRealtime(FadeAlphaAnimationClip.length);
+		_showPanels.HidePanel(panelGameObject);
+	}
+
+	
 
 	private void FadeAndDisableMenuPanel()
 	{
 		AnimMenuAlpha.SetTrigger("fade");
-		StartCoroutine("HideDelayed");
+		StartCoroutine("HideMenuDelayed");
 	}
 
 	private void ChangeMusicOnStartIfAppropriate()
