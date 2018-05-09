@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 public class PlayerController : MonoBehaviour
 {
@@ -30,7 +28,6 @@ public class PlayerController : MonoBehaviour
 	private int _CurrentListIndex;
 	public GameObject NewHero;
 	public GameObject SpawnedHero;
-	private bool _isCollectingHero;
 	private bool _isSwappingHero;
 	private bool _isColliderOverlapped;
 	private GameObject _collectedHero;
@@ -119,38 +116,11 @@ public class PlayerController : MonoBehaviour
 			else
 			{
 				Destroy(gameObject);
-				Data.Instance.GameOver(); // GameOver();
+				Data.Instance.GameOver();
 			}
 		}
 		
 		
-	}
-
-	private void SwapToReservedHeroAndDestroyCurrentHero()
-	{
-		if (_CurrentListIndex == HeroList.Count)
-		{
-			Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count-1);
-		}
-		else
-		{
-			Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count-1);
-		}
-		Debug.LogError(_CurrentListIndex);
-		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex,0,HeroList.Count-1)].gameObject.GetComponent<FriendlyHeroController>();
-		if (nextAvatar != null)
-		{
-			CurrentHealth = nextAvatar.Health;
-			CurrentAttack = nextAvatar.Attack;
-			CurrentShield = nextAvatar.Shield;
-			CurrentType = nextAvatar.Type;
-			gameObject.GetComponent<SpriteRenderer>().sprite = nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite;
-			HeroList.RemoveAt(_CurrentListIndex);
-			Destroy(nextAvatar.gameObject);
-		}
-		else
-		{
-		}
 	}
 
 	private IEnumerator ResetSwapCountdown()
@@ -178,8 +148,9 @@ public class PlayerController : MonoBehaviour
 			if (_CurrentListIndex >= HeroList.Count - 1)
 				_CurrentListIndex = 0;
 			else
-				Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count);
+				Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count-1);
 			SwapAvatar(_CurrentListIndex);
+			Debug.LogError("right : "+_CurrentListIndex);
 		}
 	}
 	
@@ -187,14 +158,45 @@ public class PlayerController : MonoBehaviour
 	{
 		if (HeroList.Count > 0)
 		{
-			if (_CurrentListIndex < 0)
+			if (_CurrentListIndex <= 0)
 				_CurrentListIndex = HeroList.Count - 1;
 			else
-				Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count);
+				Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count-1);
 			SwapAvatar(_CurrentListIndex);
+			Debug.LogError("left : "+_CurrentListIndex);
 		}
 	}
 
+	private void SwapToReservedHeroAndDestroyCurrentHero()
+	{
+		Debug.LogError("before : "+_CurrentListIndex);
+		if (_CurrentListIndex == HeroList.Count-1 && _CurrentListIndex != 0)
+		{
+			Mathf.Clamp(_CurrentListIndex--, 0, HeroList.Count-1);
+			Debug.LogError("1 : "+_CurrentListIndex);
+		}
+		else if(_CurrentListIndex < HeroList.Count-1 && _CurrentListIndex != 0)
+		{
+			Mathf.Clamp(_CurrentListIndex++, 0, HeroList.Count-1);
+			Debug.LogError("2 : "+_CurrentListIndex);
+		}
+		
+		var nextAvatar = HeroList[Mathf.Clamp(_CurrentListIndex,0,HeroList.Count-1)].gameObject.GetComponent<FriendlyHeroController>();
+		if (nextAvatar != null)
+		{
+			CurrentHealth = nextAvatar.Health;
+			CurrentAttack = nextAvatar.Attack;
+			CurrentShield = nextAvatar.Shield;
+			CurrentType = nextAvatar.Type;
+			gameObject.GetComponent<SpriteRenderer>().sprite = nextAvatar.gameObject.GetComponent<SpriteRenderer>().sprite;
+			HeroList.RemoveAt(_CurrentListIndex);
+			Destroy(nextAvatar.gameObject);
+		}
+		else
+		{
+		}
+	}
+	
 	private void SwapAvatar(int nextAvatarIndex)
 	{
 		var nextAvatar = HeroList[Mathf.Clamp(nextAvatarIndex, 0, HeroList.Count)].gameObject
@@ -223,18 +225,12 @@ public class PlayerController : MonoBehaviour
 	private void Movement()
 	{
 		Vector2 ta = transform.position;
-		if (_isCollectingHero)
-		{
-			HeroList.Insert(0, SpawnedHero.transform);
-			_isCollectingHero = false;
-		}
-		else if (HeroList.Count > 0)
+		if (HeroList.Count > 0)
 		{
 			HeroList[0].position = ta;
 			HeroList.Insert(0, HeroList.Last());
 			HeroList.RemoveAt(HeroList.Count - 1);
 		}
-		Debug.LogError("translate coord : "+_moveVector);
 		transform.Translate(_moveVector);
 	}
 
@@ -255,11 +251,11 @@ public class PlayerController : MonoBehaviour
 		_totalHealth = CurrentHealth;
 		for (var i = 0; i < HeroList.Count; i++)
 		{
-			var friendlyStat = HeroList[i].gameObject.GetComponent<FriendlyHeroController>();
-			if (friendlyStat != null)
+			if (HeroList[i] != null)
+			{
+				var friendlyStat = HeroList[i].gameObject.GetComponent<FriendlyHeroController>();
 				_totalHealth = _totalHealth + friendlyStat.Health;
-			else
-				return;
+			}
 		}
 	}
 
@@ -267,10 +263,14 @@ public class PlayerController : MonoBehaviour
 	{
 		if (c.gameObject.CompareTag("Level"))
 		{
-			Debug.LogError("level trigger collided");
 			_vector = -_vector;
-			if(HeroList.Count > 0)
+			if (HeroList.Count > 0)
 				SwapToReservedHeroAndDestroyCurrentHero();
+			else
+			{
+				Destroy(gameObject);
+				Data.Instance.GameOver();
+			}
 		}
 
 		if (c.gameObject.CompareTag("Enemy"))
@@ -280,9 +280,11 @@ public class PlayerController : MonoBehaviour
 
 		if (c.gameObject.CompareTag("Avatar"))
 		{
+			SpawnedHero = null;
 			CollectAvatar(c.gameObject);
 			SpawnedHero = Instantiate(NewHero, transform.position, Quaternion.identity);
 			InitializeNewHero(SpawnedHero);
+			HeroList.Insert(0, SpawnedHero.transform);
 			Destroy(c.gameObject);
 		}
 	}
@@ -291,8 +293,19 @@ public class PlayerController : MonoBehaviour
 	{
 		if (c.gameObject.CompareTag("Level"))
 		{
-			Debug.LogError("trigger stay");
+			int overlappingTimer = 0;
 			_isColliderOverlapped = true;
+			if (_isColliderOverlapped)
+			{
+				overlappingTimer +=1;
+				if (overlappingTimer > 3)
+				{
+					if(_vector == Vector2.right)
+						_vector = Vector2.up;
+					else if (_vector == Vector2.up) 
+						_vector = Vector2.right;
+				}
+			}
 		}
 	}
 
@@ -307,7 +320,6 @@ public class PlayerController : MonoBehaviour
 	private void CollectAvatar(GameObject cGameObject)
 	{
 		_collectedHero = cGameObject;
-		_isCollectingHero = true;	
 	}
 
 	private void EngageEnemy(GameObject collideGameObject)
@@ -318,16 +330,30 @@ public class PlayerController : MonoBehaviour
 			enemyAttack = enemyAttack * 2;
 		var totalDamage = Mathf.Clamp(enemyAttack - CurrentShield, 1, Int32.MaxValue);
 		CurrentHealth = CurrentHealth - totalDamage;
+		CancelInvoke("Movement");
+		var engageEnemyPanelController = Data.Instance.StartMenu.GetComponent<ShowPanels>().EngageEnemyPanel.GetComponent<EngageEnemyPanelController>();
+		engageEnemyPanelController.SetData(gameObject, collideGameObject);
+		engageEnemyPanelController.EnableEngagePanel(true);
+		StartCoroutine(InvokeAfterEngageSequence());
 		FloatingTextController.CreateFloatingText(totalDamage.ToString(), transform);
+	}
+
+	private IEnumerator InvokeAfterEngageSequence()
+	{
+		yield return new WaitForSecondsRealtime(0.5f);
+		var engageEnemyPanelController = Data.Instance.StartMenu.GetComponent<ShowPanels>().EngageEnemyPanel.GetComponent<EngageEnemyPanelController>();
+		engageEnemyPanelController.EnableEngagePanel(false);
+		InvokeRepeating("Movement", 0.5f, _walkSpeed);
 	}
 
 	public void CombatResolved()
 	{
 		CancelInvoke("Movement");
-		_walkSpeed -= 0.015f;
+		_walkSpeed -= 0.035f;
 		Data.Instance.AlterSpawnTime();
 		Debug.LogError("moveSpeed "+ _walkSpeed);
 		InvokeRepeating("Movement", 0.5f, _walkSpeed);
-		Data.Instance.AddPoint(_totalHealth);
+		if(_totalHealth > 0)
+			Data.Instance.AddPoint(_totalHealth);
 	}
 }

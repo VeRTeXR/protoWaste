@@ -9,7 +9,8 @@ public class ShowPanels : MonoBehaviour {
 	public GameObject PausePanel;							//Store a reference to the Game Object PausePanel
 	public GameObject GameplayPanel;
 	public GameObject ResultPanel;
-
+	public GameObject EngageEnemyPanel;
+	
 	public void HidePanel(GameObject panel)
 	{
 		panel.SetActive(false);

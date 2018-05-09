@@ -1,20 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEngine.VR.WSA.Persistence;
 
 public class  Data : MonoBehaviour
 {
-
-//	public GameObject Timer;
 	public GameObject Player;
-
 	public GameObject StartMenu;
+	
 	public float MaxAvatarSpawnTimer;
 	public float CurrentAvatarSpawnTimer;
 	public float MaxEnemySpawnTimer;
 	public float CurrentEnemySpawnTimer;
-	private bool _playerCompletedTheLevel;
 	private int _highScore;
 	private int _currentSessionScore;
 
@@ -37,8 +31,8 @@ public class  Data : MonoBehaviour
 		else 
 			Destroy(this);
 
-		CurrentLevel = PlayerPrefs.GetInt("CurrentLevel");
-		
+		_highScore = PlayerPrefs.GetInt("HighScore");		
+		Debug.LogError("GetHS :: "+ PlayerPrefs.GetInt("HighScore"));
 		InitializeGameObject(); 
 		InitializeTimer();
 		InitializePlayerValue();
@@ -47,9 +41,6 @@ public class  Data : MonoBehaviour
 
 	private void InitializeGameObject()
 	{
-//		if(Timer == null)
-//			Timer = GameObject.FindWithTag("Timer");
-
 		Player = GameObject.FindWithTag("Player");
 		if (Player == null)
 			Player = (GameObject)Instantiate(Resources.Load("Prefab/Player"));
@@ -66,9 +57,7 @@ public class  Data : MonoBehaviour
 
 	private void InitializePlayerValue()
 	{
-//		CurrentLevel = 0;
-//		_lastLevelReached = 0;
-//		_currentSessionScore = 0; 
+		_currentSessionScore = 0;
 	}
 
 	void Update ()
@@ -78,8 +67,7 @@ public class  Data : MonoBehaviour
 			CurrentAvatarSpawnTimer -= Time.deltaTime;
 			CurrentEnemySpawnTimer -= Time.deltaTime;
 		}
-//		Timer.GetComponent<Text>().text = CurrentTimer.ToString("F3");
-//
+		
 		if (CurrentAvatarSpawnTimer <= 0)
 		{
 			var avatar = Resources.Load("Prefab/Avatar");
@@ -96,28 +84,46 @@ public class  Data : MonoBehaviour
 			CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
 		}
 	}
-
-
+	
 	public void GameOver()
 	{
-//		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
+		CurrentAvatarSpawnTimer = MaxAvatarSpawnTimer;
 		CurrentEnemySpawnTimer = MaxEnemySpawnTimer;
+		if (_currentSessionScore > _highScore)
+		{
+			PlayerPrefs.SetInt("HighScore", _currentSessionScore);
+		}
 		_isPlaying = false;
 		StartMenu.GetComponent<StartOptions>().SessionOver();
 	}
 
 	public void Retry()
 	{
+		ResetRemainFromLastSession();
 		InitializeGameObject(); 
 		InitializeTimer();
 		InitializePlayerValue();
 		_currentSessionScore = 0;
 		StartMenu.GetComponent<StartOptions>().Retry();
 	}
-	
+
+	private void ResetRemainFromLastSession()
+	{
+		var remainedAvatar = GameObject.FindGameObjectsWithTag("Avatar");
+		var remainedEnemy = GameObject.FindGameObjectsWithTag("Enemy");
+		for (var i = 0; i < remainedAvatar.Length; i++)
+			Destroy(remainedAvatar[i].gameObject);
+		for (var j = 0; j < remainedEnemy.Length; j++)
+			Destroy(remainedEnemy[j].gameObject);
+	}
+
 	public void AddPoint(int totalHealth)
 	{
 		_currentSessionScore += totalHealth;
+		if (_currentSessionScore > _highScore)
+		{
+			_highScore = _currentSessionScore;
+		}
 	}
 
 	public int GetCurrentScore()
@@ -128,6 +134,11 @@ public class  Data : MonoBehaviour
 	public void AlterSpawnTime()
 	{
 		MaxAvatarSpawnTimer += 1f;
-		MaxEnemySpawnTimer -= 0.4f;
+		MaxEnemySpawnTimer -= 0.05f;
+	}
+
+	public int GetHighScore()
+	{
+		return _highScore;
 	}
 }

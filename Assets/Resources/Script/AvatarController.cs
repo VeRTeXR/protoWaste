@@ -20,13 +20,4 @@ public class AvatarController : MonoBehaviour
 	{
 		GetComponent<SpriteRenderer>().sprite = avatarSprite;
 	} 
-	
-	private void OnTriggerEnter2D(Collider2D c)
-	{
-		if (c.gameObject.CompareTag("Player"))
-		{
-			transform.parent = null;
-			GetComponent<BoxCollider2D>().enabled = false;
-		}
-	}
 }
