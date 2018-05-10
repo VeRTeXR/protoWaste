@@ -133,8 +133,10 @@ public class  Data : MonoBehaviour
 
 	public void AlterSpawnTime()
 	{
-		MaxAvatarSpawnTimer += 1f;
-		MaxEnemySpawnTimer -= 0.05f;
+		if (MaxAvatarSpawnTimer < 5f)
+			MaxAvatarSpawnTimer += 1f;
+		if (MaxEnemySpawnTimer > 0.3f)
+			MaxEnemySpawnTimer -= 0.05f;
 	}
 
 	public int GetHighScore()

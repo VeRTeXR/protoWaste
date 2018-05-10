@@ -14,24 +14,18 @@ public class ResultPanelController : MonoBehaviour
 				Data.Instance.GetCurrentScore().ToString();
 		}
 		
-		Debug.LogError("cur : "+Data.Instance.GetCurrentScore() + " : " + Data.Instance.GetHighScore());
-		
-			HighScoreText.SetActive(true);
+		HighScoreText.SetActive(true);
 		if (Data.Instance.GetCurrentScore() < Data.Instance.GetHighScore())
 		{
 			for (var i = 0; i < HighScoreText.transform.childCount; i++)
-			{
 				HighScoreText.transform.GetChild(i).GetComponent<Text>().text =
 					"Highscore : " + Data.Instance.GetHighScore();
-			}
 		}
 		else
 		{
 			for (var i = 0; i < HighScoreText.transform.childCount; i++)
-			{
 				HighScoreText.transform.GetChild(i).GetComponent<Text>().text =
 					"NEW HIGHSCORE!";
-			}
 		}
 	}
 

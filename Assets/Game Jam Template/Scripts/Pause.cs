@@ -16,7 +16,6 @@ public class Pause : MonoBehaviour {
 		if (Input.GetButtonDown ("Cancel") && !_isPaused && !_startScript.InMainMenu) 
 		{
 			DoPause();
-			_startScript.SetPlayerState(false);
 			_showPanels.ShowPausePanel();
 		} 
 		else if (Input.GetButtonDown ("Cancel") && _isPaused && !_startScript.InMainMenu)
@@ -29,7 +28,6 @@ public class Pause : MonoBehaviour {
 
 	private void HidePausePanelAndEnablePlayerControl()
 	{
-		_startScript.SetPlayerState(true);
 		_showPanels.HidePausePanel();
 	}
 

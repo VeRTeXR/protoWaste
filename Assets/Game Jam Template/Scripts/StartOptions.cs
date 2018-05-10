@@ -29,18 +29,8 @@ public class StartOptions : MonoBehaviour {
 		_playMusic = GetComponent<PlayMusic>();
 		_player = GameObject.FindGameObjectWithTag("Player");
 
-		SetPlayerState(false);
 		SetUnscaleUiAnimatorUpdateMode();
 		PauseScript.DoPause();
-	}
-
-	public void SetPlayerState(bool isEnabled)
-	{
-//		if (_player != null)
-//		{
-//			_player.gameObject.GetComponent<Player>().enabled = isEnabled;
-//			_player.gameObject.GetComponent<Controller2D>().enabled = isEnabled;
-//		}
 	}
 
 	private void SetUnscaleUiAnimatorUpdateMode()
@@ -53,7 +43,6 @@ public class StartOptions : MonoBehaviour {
 	public void StartButtonClicked()
 	{
 		FadeOutMusicOnStartIfAppropriate();
-		SetPlayerState(true);
 		StartGameInScene();
 	}
 
@@ -90,9 +79,7 @@ public class StartOptions : MonoBehaviour {
 	{
 		AnimMenuAlpha = panelGameObject.GetComponent<Animator>();
 		if (AnimMenuAlpha != null)
-		{
 			AnimMenuAlpha.SetTrigger("fade");
-		}
 		StartCoroutine(HidePanelDelayed(panelGameObject));
 	}
 
@@ -100,14 +87,6 @@ public class StartOptions : MonoBehaviour {
 	{
 		yield return new WaitForSecondsRealtime(FadeAlphaAnimationClip.length);
 		_showPanels.HidePanel(panelGameObject);
-	}
-
-	
-
-	private void FadeAndDisableMenuPanel()
-	{
-		AnimMenuAlpha.SetTrigger("fade");
-		StartCoroutine("HideMenuDelayed");
 	}
 
 	private void ChangeMusicOnStartIfAppropriate()
