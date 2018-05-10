@@ -8,22 +8,16 @@ using Random = UnityEngine.Random;
 public class PlayerController : MonoBehaviour
 {
 	private float _walkSpeed;
-	private int _faceDirection;
-	private float _currentWalkCountdownInterval;
 	private bool _hasPlayerInputBeenProcessed;
 	private int _totalHealth;
 
-	private bool _vertical = false;
-	private bool _horizontal = true;
 	private Vector2 _vector = Vector2.up;
 	private Vector2 _moveVector;
-
 
 	public int CurrentHealth;
 	public int CurrentAttack;
 	public int CurrentShield;
 	public int CurrentType;
-
 
 	public List<Transform> HeroList;
 	private int _currentListIndex;
@@ -33,7 +27,6 @@ public class PlayerController : MonoBehaviour
 	private bool _isColliderOverlapped;
 	private GameObject _collectedHero;
 
-	private float _yAngleRotation;
 	private int _overlappingTimer;
 
 

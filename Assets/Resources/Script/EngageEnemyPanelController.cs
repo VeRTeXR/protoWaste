@@ -68,15 +68,15 @@ public class EngageEnemyPanelController: MonoBehaviour
 		switch (EnemyData.Type)
 		{
 			case 1:
-				enemyTypeString = "Fire";
+				enemyTypeString = "Red";
 				EnemyType.color = Color.red;
 				break;
 			case 2:
-				enemyTypeString = "Water";
+				enemyTypeString = "Blue";
 				EnemyType.color = Color.blue;
 				break;
 			case 3:
-				enemyTypeString = "Air";
+				enemyTypeString = "Green";
 				EnemyType.color = Color.green;
 				break;
 		}
@@ -98,7 +98,8 @@ public class EngageEnemyPanelController: MonoBehaviour
 	private IEnumerator DisableAfterShown()
 	{
 		yield return new WaitForSecondsRealtime(0.5f);
-		
+		StartCoroutine(ScaleToSize(transform, Vector3.zero, 0.1f));
+		yield return new WaitForSecondsRealtime(0.1f);
 		EnableEngagePanel(false);
 	}
 

@@ -14,7 +14,6 @@ public class StartOptions : MonoBehaviour {
 	private PlayMusic _playMusic;
 	private float fastFadeIn = .01f;
 	private ShowPanels _showPanels;
-	private GameObject _player;
 	private GameObject _startOptionSelector; 
 
 	public void Awake()
@@ -27,7 +26,6 @@ public class StartOptions : MonoBehaviour {
 		_showPanels = GetComponent<ShowPanels>();
 		PauseScript = GetComponent<Pause>();
 		_playMusic = GetComponent<PlayMusic>();
-		_player = GameObject.FindGameObjectWithTag("Player");
 
 		SetUnscaleUiAnimatorUpdateMode();
 		PauseScript.DoPause();

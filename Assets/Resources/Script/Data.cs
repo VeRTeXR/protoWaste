@@ -32,7 +32,6 @@ public class  Data : MonoBehaviour
 			Destroy(this);
 
 		_highScore = PlayerPrefs.GetInt("HighScore");		
-		Debug.LogError("GetHS :: "+ PlayerPrefs.GetInt("HighScore"));
 		InitializeGameObject(); 
 		InitializeTimer();
 		InitializePlayerValue();

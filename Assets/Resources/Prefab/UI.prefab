@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 222336198776996840}
   - component: {fileID: 114587812016062644}
   - component: {fileID: 114967435182589906}
-  - component: {fileID: 114148474991088992}
+  - component: {fileID: 114248251873431924}
   m_Layer: 5
   m_Name: Start
   m_TagString: Untagged
@@ -1203,7 +1203,7 @@ GameObject:
   - component: {fileID: 222855582286457584}
   - component: {fileID: 114509865164685404}
   - component: {fileID: 114819120793223060}
-  - component: {fileID: 114802221683057652}
+  - component: {fileID: 114403683567993418}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -1447,7 +1447,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1917760923082642
 GameObject:
   m_ObjectHideFlags: 1
@@ -1589,7 +1589,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1977290702875974
 GameObject:
   m_ObjectHideFlags: 1
@@ -2061,17 +2061,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 0.85
   m_Text: ZERO-Bit
---- !u!114 &114148474991088992
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1084280612836168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a674897c3a69dd549b31051bed92117f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114154570848840480
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2265,6 +2254,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: New Text
+--- !u!114 &114248251873431924
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084280612836168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6877193c94e400c88d99c15e302c3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114253884981349618
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2649,6 +2649,17 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 0.85
   m_Text: SCORE
+--- !u!114 &114403683567993418
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1753068666758320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e6877193c94e400c88d99c15e302c3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114403948406269466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3992,17 +4003,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Quit
---- !u!114 &114802221683057652
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1753068666758320}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a674897c3a69dd549b31051bed92117f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114802605527335774
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5978,9 +5978,9 @@ RectTransform:
   m_Father: {fileID: 224668338030659672}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 501.58502, y: 50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224313043737833626
@@ -6016,8 +6016,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -105, y: -35}
-  m_SizeDelta: {x: 200, y: 100}
+  m_AnchoredPosition: {x: -214.2, y: -43.1}
+  m_SizeDelta: {x: 418.3, y: 116.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224328821867974094
 RectTransform:
@@ -7123,9 +7123,9 @@ RectTransform:
   m_Father: {fileID: 224668338030659672}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 298.415, y: 50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224944219609926556
