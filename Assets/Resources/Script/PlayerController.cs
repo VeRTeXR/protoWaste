@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 	private bool _isSwappingHero;
 	private bool _isColliderOverlapped;
 	private GameObject _collectedHero;
-
+	private SpriteRenderer _currentSpriteRenderer;
 	private int _overlappingTimer;
 
 
@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour
 
 	private void InitializePlayer()
 	{
-		_walkSpeed = 0.75f;
+		_currentSpriteRenderer = GetComponent<SpriteRenderer>();
+		_walkSpeed = 0.5f;
 		_currentListIndex = -1;
 		_vector = Vector2.up;
 		CurrentHealth = Random.Range(1,5);
@@ -82,13 +83,30 @@ public class PlayerController : MonoBehaviour
 				_hasPlayerInputBeenProcessed = true;
 			}
 		}
+		
 		_moveVector = _vector / 6f;
-
-		if (_vector == Vector2.right)
-			GetComponent<SpriteRenderer>().flipX = false;
-		else if (_vector == -Vector2.right)
-			GetComponent<SpriteRenderer>().flipX = true;
-
+		
+		if (HeroList.Count > 0)
+		{
+			if (_vector == Vector2.right)
+			{
+				if (_currentSpriteRenderer.flipX)
+				{
+					_currentSpriteRenderer.flipX = false;
+					for (var i = 0; i < HeroList.Count; i++)
+						HeroList[i].gameObject.GetComponent<SpriteRenderer>().flipX = false;
+				}
+			}
+			else if (_vector == -Vector2.right)
+			{
+				if (!_currentSpriteRenderer.flipX)
+				{
+					_currentSpriteRenderer.flipX = true;
+					for (var i = 0; i < HeroList.Count; i++)
+						HeroList[i].gameObject.GetComponent<SpriteRenderer>().flipX = true;
+				}
+			}
+		}
 
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
