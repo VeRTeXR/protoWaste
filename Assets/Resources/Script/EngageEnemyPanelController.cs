@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,10 +40,10 @@ public class EngageEnemyPanelController: MonoBehaviour
 		EnemySprite = EnemyData.GetComponent<SpriteRenderer>().sprite;
 		PlayerImage.sprite = PlayerSprite;
 		EnemyImage.sprite = EnemySprite;
-		PlayerHealth.text = "HP : " + PlayerData.CurrentHealth;
+		PlayerHealth.text = "HP : " + Mathf.Clamp(PlayerData.CurrentHealth,0,Int32.MaxValue);
 		PlayerAttack.text = "ATK : " + PlayerData.CurrentAttack;
 		PlayerDefense.text = "DEF : " + PlayerData.CurrentShield;
-		EnemyHealth.text = "HP : " + EnemyData.Health;
+		EnemyHealth.text = "HP : " + Mathf.Clamp(EnemyData.Health,0,Int32.MaxValue);
 		EnemyAttack.text = "ATK : " + EnemyData.Attack;
 		EnemyDefense.text = "DEF : " + EnemyData.Shield;
 
